@@ -22,6 +22,8 @@ x = input('Do you want to search for a organisation or specific IPs? Enter 1 for
 userInput = ""
 results = []
 inputs = []
+ports = []
+str2 = ""
 
 def f(x):
     global results
@@ -61,14 +63,19 @@ with open('Output for ' + userInput + '.csv', 'w', encoding='UTF8', newline='') 
         pdf.cell(200, 10, txt = "IP: {}".format(result['ip_str']),
         ln = 1,  align = 'C')
         pdf.set_font("Arial", 'B', size = 16)
+        #for item in result:
+        #    for ele in item: 
+        #        str2 += ele
+        #    ports.append(str2)  -- Attempt at getting ports printed out
+        #pdf.cell(200, 10, txt="Ports: {}".format(ports),
+        #align='C')
         pdf.cell(200, 10, txt = "{}".format(result['org']),
         ln = 1,  align = 'C')
+        pdf.set_font("Arial", size = 14)
         dictIo = []
         key = 'vulns'
         if(key in result):
-
             for item in result['vulns']:
-                
                 dictIo.append({"CVE":item,"cvss": float(result['vulns'][item]['cvss']),"desc":result['vulns'][item]['summary']})
                 numberOfCVEs = numberOfCVEs + 1
                 cvssScore = float(result['vulns'][item]['cvss'])
@@ -79,19 +86,19 @@ with open('Output for ' + userInput + '.csv', 'w', encoding='UTF8', newline='') 
                 elif 9 > cvssScore >= 7: 
                     numberOfHighCVE = numberOfHighCVE + 1
 
-                #print("Number of high CVE: {}".format(numberOfHighCVE))
-                #print("Number of Critical cve: {}".format(numberOfCriticalCVE))
-                #print("CVSS: {}".format(cvssScore))
-                #print("Number of CVEs {}".format(numberOfCVEs))
-
             dictIo.sort(key=sortList, reverse=True)
-        
+            pdf.cell(200, 14, txt = "Total amount of CVE found: {}".format(numberOfCVEs),
+            ln = 1, align = 'L')
             dictCounter = 0
             for item in dictIo:
-                pdf.cell(200, 20, txt = "{}".format(dictIo[dictCounter]['CVE']) + "   CVSS: {}".format(dictIo[dictCounter]['cvss']),
+                pdf.set_font("Arial", size = 14)
+                pdf.cell(200, 14, txt = "{}".format(dictIo[dictCounter]['CVE']) + "   CVSS: {}".format(dictIo[dictCounter]['cvss']),
                 ln = 1, align = 'L')
-                pdf.multi_cell(180, 7, txt = "Description:\n{}".format(dictIo[dictCounter]['desc']), 
+                pdf.set_font("Arial", size = 12)
+                pdf.multi_cell(180, 5, txt = "Description:\n{}".format(dictIo[dictCounter]['desc']), 
                 align = 'L')
+                pdf.multi_cell(200, 10, txt = "",
+                align= 'L')
                 dictCounter= dictCounter+1
 
 
