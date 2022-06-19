@@ -27,6 +27,7 @@ str2 = ""
 
 def f(x):
     global results
+    global userInput
     str1 = ""
     match x:
         case '1':
